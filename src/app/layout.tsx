@@ -33,12 +33,16 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </Head>
       <body>
         <Layout
+    
+          editLink={false}
+          feedback={{ content: null }}
           navbar={navbar}
           pageMap={await getPageMap()}
           // docsRepositoryBase="https://github.com/shuding/nextra/tree/main/docs"
           footer={footer}
           // ... Your additional layout options
         >
+          
           {children}
         </Layout>
       </body>
