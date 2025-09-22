@@ -11,6 +11,7 @@ export const metadata = {
 const navbar = (
   <Navbar
     logo={<b>Dipak Rathod</b>}
+    projectLink='https://github.com/dipakrathod-tech'
     // ... Your additional navbar options
   />
 )
