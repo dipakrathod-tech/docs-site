@@ -1,7 +1,9 @@
-import { Footer, Layout, Navbar } from 'nextra-theme-docs'
+import { Layout, Navbar } from 'nextra-theme-docs'
+import Footer from '../components/footer'
 import { Head } from 'nextra/components'
 import { getPageMap } from 'nextra/page-map'
 import 'nextra-theme-docs/style.css'
+import './globals.css'
  
 export const metadata = {
   // Define your metadata here
@@ -15,9 +17,11 @@ const navbar = (
     // ... Your additional navbar options
   />
 )
-const footer = <Footer>{new Date().getFullYear()} © Dipak Rathod.</Footer>
+
  
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
+
+ 
   return (
     <html
       // Not required, but good for SEO
@@ -40,7 +44,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           navbar={navbar}
           pageMap={await getPageMap()}
           // docsRepositoryBase="https://github.com/shuding/nextra/tree/main/docs"
-          footer={footer}
+          footer={<Footer />}
           // ... Your additional layout options
         >
           
