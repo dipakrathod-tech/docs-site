@@ -4,11 +4,21 @@ import { Head } from 'nextra/components'
 import { getPageMap } from 'nextra/page-map'
 import 'nextra-theme-docs/style.css'
 import './globals.css'
+import { Metadata } from 'next/dist/lib/metadata/types/metadata-interface'
  
-export const metadata = {
-  // Define your metadata here
-  // For more information on metadata API, see: https://nextjs.org/docs/app/building-your-application/optimizing/metadata
-}
+export const metadata: Metadata = {
+  title: "Dipak Rathod - Cloud & DevOps Engineer",
+  description: "Documentation Hub for Cloud, DevOps, and Software Development Projects",
+  icons: {
+    icon: [
+      {
+        url: "/favicon.svg",
+        type: "image/svg+xml",
+      },
+    ],
+    shortcut: "/favicon.svg",
+  },
+};
  
 const navbar = (
   <Navbar
@@ -17,6 +27,8 @@ const navbar = (
     // ... Your additional navbar options
   />
 )
+
+
 
  
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
@@ -32,6 +44,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       suppressHydrationWarning
     >
       <Head
+        faviconGlyph="✦" 
+
       // ... Your additional head options
       >
         {/* Your additional tags should be passed as `children` of `<Head>` element */}

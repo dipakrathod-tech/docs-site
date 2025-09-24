@@ -1,0 +1,77 @@
+---
+title: "Demo Workshop"
+asIndexPage: false
+---
+
+import { FaChalkboardTeacher as WorkshopIcon } from 'react-icons/fa'
+
+# Demo Workshop
+
+Estimated time: ~60 minutes
+
+This demo workshop shows a concise workshop format you can reuse: agenda, prerequisites, setup, hands-on steps, and resources.
+
+## Agenda
+
+1. Introduction (10m)
+2. Setup & environment check (10m)
+3. Hands-on lab (30m)
+4. Wrap-up & next steps (10m)
+
+## Prerequisites
+
+- Node.js 16+ installed
+- A code editor (VS Code recommended)
+- Git
+
+## Setup
+
+Clone the repo and install dependencies:
+
+```bash copy showLineNumbers
+git clone https://github.com/your-username/your-repo.git
+cd your-repo
+pnpm install
+```
+
+If you use npm:
+
+```bash copy showLineNumbers
+npm install
+```
+
+## Quick environment check
+
+Run the dev server and confirm the site opens at http://localhost:3000
+
+```bash copy showLineNumbers
+pnpm dev
+```
+
+## Hands-on lab (example)
+
+Create a tiny component in `src/components/WorkshopDemo.tsx` and export it.
+
+```tsx copy showLineNumbers
+import React from 'react'
+
+export function WorkshopDemo() {
+  return (
+    <div style={{ padding: 12, borderRadius: 8, background: 'rgba(0,0,0,0.04)' }}>
+      <strong>Workshop demo</strong>
+      <p>This component was created during the workshop.</p>
+    </div>
+  )
+}
+```
+
+Import and use it in a page or MDX to preview.
+
+## Resources
+
+- Repo: https://github.com/your-username/your-repo
+- Slides: (add link)
+
+## Notes
+
+I can scaffold the example component and wire it into the site so workshop attendees can preview it immediately. Want me to create `src/components/WorkshopDemo.tsx` and add an import example in the workshop page?

@@ -1,0 +1,70 @@
+---
+title: "Demo Tutorial"
+asIndexPage: false
+icon: FileIcon
+---
+
+import { FaBook as BookIcon } from 'react-icons/fa'
+
+# Demo Tutorial
+
+This demo tutorial shows a small, self-contained walkthrough you can use as a template for other tutorials in this site. It includes goals, prerequisites, step-by-step instructions, and a tiny example you can copy.
+
+## Goal
+
+By the end of this tutorial you'll have a tiny example app/component running locally and understand how to document a tutorial in this repository.
+
+## Prerequisites
+
+- Node.js (16+ recommended)
+- pnpm, npm, or yarn
+
+If you're on Windows and using PowerShell (the default shell for this workspace), the commands shown in code blocks will work with `pwsh`.
+
+## Steps
+
+1. Install dependencies
+
+```powershell copy showLineNumbers
+# using pnpm
+pnpm install
+
+# or npm
+npm install
+```
+
+2. Run the development server
+
+```powershell copy showLineNumbers
+# pnpm
+pnpm dev
+
+# npm
+npm run dev
+```
+
+3. Open the site at http://localhost:3000
+
+## Tiny example
+
+Below is a minimal React component example you can drop into a file such as `src/components/DemoTutorialExample.tsx`.
+
+```tsx copy showLineNumbers
+import React from 'react'
+
+type Props = { message?: string }
+
+export function DemoTutorialExample({ message = 'Hello from the demo tutorial' }: Props) {
+  return (
+    <div style={{ padding: 16, borderRadius: 8, background: 'rgba(0,0,0,0.03)' }}>
+      <h3>{message}</h3>
+      <p>This is a minimal component used for tutorial purposes.</p>
+    </div>
+  )
+}
+```
+
+## Notes
+
+- Replace commands and file paths to match the real project you're documenting.
+- If you'd like, I can also scaffold the example component and wire it into the site so you can preview it immediately.

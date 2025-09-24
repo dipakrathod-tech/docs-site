@@ -1,73 +1,54 @@
 ---
-title: Introduction 
+title: Introduction
 ---
 
-import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import Link from 'next/link'
+import { Cards } from 'nextra/components'
+import { VscRepo } from 'react-icons/vsc'
+import { GrWorkshop } from "react-icons/gr";
+import { VscTools } from "react-icons/vsc";
 
-# Welcome to My Cloud & DevOps Documentation
+# Welcome to my Documentation Hub
 
-Hi there! I'm Alex, a passionate cloud engineer and developer. I created this documentation website as a central hub for my personal projects, technical guides, and curated resources on AWS, DevOps, and software development.
+Hi, I'm **Dipak Rathod** — an aspiring Cloud & DevOps engineer and developer.  
+This site is my central hub for personal projects, hands-on tutorials, and carefully curated resources around **AWS, DevOps, and modern software development**.
 
-Whether you're looking for a step-by-step tutorial or an in-depth project breakdown, I hope you find something useful here.
+Whether you’re here to follow a step‑by‑step tutorial or to dive into a detailed project breakdown, I aim to make this space practical, beginner‑friendly, and insightful.
 
-<br />
+<br/>
 
-## What You'll Find Here
+## What You’ll Find Here
 
-This site is organized into several key sections to help you navigate:
+The site is organized into clear sections to help you navigate with ease:
 
-* **Project Documentation:** Detailed documentation and code for my personal projects, including architecture diagrams and setup instructions.
-* **AWS & DevOps Resources:** Guides on building and managing infrastructure, CI/CD pipelines, and best practices for cloud-native applications.
-* **Development Guides:** Practical guides and tutorials for various programming languages, frameworks, and tools.
-* **Workshops & Tutorials:** Hands-on, step-by-step tutorials to help you learn new skills.
+- **Project Documentation** → Explore detailed write‑ups of my projects, complete with architecture diagrams, setup guides, and code references.  
 
-<br />
+<Cards.Card
+  icon={<VscRepo />}
+  title="Projects"
+  href="/projects"
+  arrow
+/>
 
-## Featured Content
+- **AWS & DevOps Resources** → Learn about infrastructure as code, CI/CD pipelines, automation, and best practices for cloud‑native applications.  
+- **Development Guides** → Step‑by‑step tutorials and tips on programming languages, frameworks, and developer tools.  
+- **Workshops & Tutorials** → Hands‑on sessions designed to help you learn by doing, covering everything from basics to advanced workflows.  
 
-Explore some of the most popular guides and projects on the site.
+<Cards>
+  <Cards.Card
+    icon={<VscTools />}
+    title="Tutorials"
+    href="/docs/tutorials"
+    arrow
+  />
+  <Cards.Card
+    icon={<GrWorkshop />}
+    title="Workshops"
+    href="/docs/workshops"
+    arrow
+  />
+</Cards>
 
-<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-<Link href="/tutorials/serverless-api-aws">
-<Card className="p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer">
-<CardHeader>
-<CardTitle>Building a Serverless REST API with AWS Lambda & API Gateway</CardTitle>
-</CardHeader>
-<CardDescription>A complete guide on creating a scalable and cost-effective API using AWS's serverless services.</CardDescription>
-</Card>
-</Link>
-<Link href="/aws-devops/terraform-s3-bucket">
-<Card className="p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer">
-<CardHeader>
-<CardTitle>Terraform for Beginners: Deploying an S3 Bucket</CardTitle>
-</CardHeader>
-<CardDescription>Learn the basics of Infrastructure as Code with this hands-on tutorial.</CardDescription>
-</Card>
-</Link>
-<Link href="/projects/image-watermarker">
-<Card className="p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer">
-<CardHeader>
-<CardTitle>Project: Automated Image Watermarking Service</CardTitle>
-</CardHeader>
-<CardDescription>Detailed documentation of a personal project that automatically watermarks images uploaded to an S3 bucket.</CardDescription>
-</Card>
-</Link>
-</div>
+<br/>
 
-<br />
-
-## Let's Connect!
-
-I'm always open to discussing new ideas and collaborating. Feel free to connect with me.
-
--   [**LinkedIn**](https://linkedin.com/in/yourprofile)
--   [**GitHub**](https://github.com/yourusername)
--   [**Twitter/X**](https://twitter.com/yourhandle)
-
-<br />
-
----
-
-> _"The beautiful thing about learning is that no one can take it away from you."_
+> _“The beautiful thing about learning is that no one can take it away from you.”_  
 > — B.B. King
