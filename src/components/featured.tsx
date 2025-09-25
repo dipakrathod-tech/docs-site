@@ -4,7 +4,10 @@ import React from "react"
 import { motion } from "motion/react"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { FiFolder, FiBookOpen, FiCalendar } from "react-icons/fi"
+import { VscRepo } from 'react-icons/vsc'
+import { GrWorkshop } from "react-icons/gr";
+import { VscTools } from "react-icons/vsc";
+
 
 type Feature = {
   title: string
@@ -19,20 +22,20 @@ const features: Feature[] = [
     title: "Projects",
     description: "Real-world projects with code samples, architecture insights, and deployment strategies for cloud and DevOps.",
     href: "/docs/projects",
-    icon: <FiFolder className="h-6 w-6" aria-hidden />,
+    icon: <VscRepo className="h-6 w-6" aria-hidden />,
   },
     {
     title: "Guides & Tutorials",
     description:
       "Step-by-step tutorials on cloud platforms, DevOps tools, and software development best practices.",
     href: "/docs/tutorials",
-    icon: <FiBookOpen className="h-6 w-6" aria-hidden />,
+    icon: <VscTools className="h-6 w-6" aria-hidden />,
   },
   {
     title: "Workshops",
     description: "Interactive workshops covering CI/CD pipelines, infrastructure as code, and modern development workflows.",
     href: "/docs/workshops",
-    icon: <FiCalendar className="h-6 w-6" aria-hidden />,
+    icon: <GrWorkshop className="h-6 w-6" aria-hidden />,
   },
 ]
 
