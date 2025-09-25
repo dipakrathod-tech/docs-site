@@ -34,7 +34,7 @@ function PrimaryCTA({ ctaHref, ctaText }: { ctaHref: string; ctaText: string }) 
 export default function Hero({
 		title = (
 			<>
-				Hey, I&apos;m <span className="text-indigo-400">Dipak Rathod</span>.
+				Hey, I&apos;m <span className="text-indigo-400 whitespace-nowrap">Dipak Rathod</span>.
 				<br /> Welcome to my Documentation Hub
 			</>
 		),
