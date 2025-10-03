@@ -75,7 +75,7 @@ export default function Hero({
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
 
       {/* Content */}
-      <div className="relative z-20 flex min-h-full items-center">
+      <div className="relative z-0 flex min-h-full items-center">
         <div className="container mx-auto px-6 py-20">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight tracking-tight">
             {title}
@@ -103,7 +103,7 @@ export default function Hero({
       </div>
 
       {/* Decorative footer hint */}
-      <div className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 text-sm text-muted-foreground">
+      <div className="absolute bottom-6 left-1/2 z-0 -translate-x-1/2 text-sm text-muted-foreground">
         Built with attention to detail
       </div>
     </section>
