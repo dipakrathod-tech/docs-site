@@ -1,6 +1,6 @@
 /**
  * Article Schema Component
- * 
+ *
  * Generates JSON-LD structured data for articles/tutorials/projects
  * to improve SEO and enable rich snippets in search results.
  */

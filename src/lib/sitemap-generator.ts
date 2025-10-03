@@ -1,14 +1,14 @@
 /**
  * Dynamic Sitemap Generator Helper
- * 
+ *
  * This file provides utilities to generate sitemap entries dynamically
  * based on your content structure.
- * 
+ *
  * Usage:
  * 1. Import this in your sitemap.ts
  * 2. Call generateContentPages() to get all MDX pages
  * 3. Merge with your static pages
- * 
+ *
  * TODO: Implement file system scanning when you add more content
  */
 
@@ -80,13 +80,13 @@ export function getSectionPages(): SitemapEntry[] {
 
 /**
  * Content pages (projects, tutorials, workshops)
- * 
+ *
  * TODO: When you add more content, add entries here or implement
  * file system scanning to generate this dynamically.
  */
 export function getContentPages(): SitemapEntry[] {
   const currentDate = new Date();
-  
+
   // Manually defined content pages
   // Replace this with dynamic file scanning when you have more content
   const contentPages = [
@@ -125,20 +125,20 @@ export function generateSitemap(): MetadataRoute.Sitemap {
 
 /**
  * Future: Scan file system for MDX files
- * 
+ *
  * Uncomment and implement when you have more content:
- * 
+ *
  * import { readdirSync, statSync } from "fs";
  * import { join } from "path";
- * 
+ *
  * export function scanMDXPages(dir: string): SitemapEntry[] {
  *   const entries: SitemapEntry[] = [];
  *   const files = readdirSync(dir);
- *   
+ *
  *   for (const file of files) {
  *     const filePath = join(dir, file);
  *     const stat = statSync(filePath);
- *     
+ *
  *     if (stat.isDirectory()) {
  *       entries.push(...scanMDXPages(filePath));
  *     } else if (file === "page.mdx") {
@@ -147,7 +147,7 @@ export function generateSitemap(): MetadataRoute.Sitemap {
  *         .replace(process.cwd(), "")
  *         .replace("/src/app", "")
  *         .replace("/page.mdx", "");
- *       
+ *
  *       entries.push({
  *         url: `${BASE_URL}${url}`,
  *         lastModified: stat.mtime,
@@ -156,7 +156,7 @@ export function generateSitemap(): MetadataRoute.Sitemap {
  *       });
  *     }
  *   }
- *   
+ *
  *   return entries;
  * }
  */

@@ -69,7 +69,7 @@ export const metadata: Metadata = {
     apple: "/icon.svg",
   },
   verification: {
-    google: "uMaPo0x9ifwxT-qd2XvwCtEE5q3qXeiP3n0y5WvTpaM",
+    google: "FAAYZMJz8w9uon2ohxSFkGplYRuWzoca0sY0TsMS-j4",
     // yandex: "your-yandex-verification-code",
     // bing: "your-bing-verification-code",
   },
@@ -104,8 +104,7 @@ export default async function RootLayout({
       // Suggested by `next-themes` package https://github.com/pacocoursey/next-themes#with-app
       suppressHydrationWarning
     >
-      <Head
-      >
+      <Head>
         {/* Structured Data for SEO - Enhanced Schema */}
         <script
           type="application/ld+json"
