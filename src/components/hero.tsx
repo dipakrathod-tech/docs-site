@@ -91,9 +91,13 @@ export default function Hero({
 
             <InteractiveHoverButton
               className="text-sm text-muted-foreground hover:text-primary-foreground transition-colors"
-              onClick={() =>
-                window.open("https://www.dipakrathod.me", "_blank")
-              }
+              onClick={() => {
+                const link = document.createElement("a");
+                link.href = "https://www.dipakrathod.me";
+                link.target = "_blank";
+                link.rel = "noopener noreferrer";
+                link.click();
+              }}
               aria-label="View portfolio"
             >
               View portfolio

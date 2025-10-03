@@ -1,38 +1,17 @@
 import { MetadataRoute } from "next";
+import { generateSitemap } from "@/lib/sitemap-generator";
 
+/**
+ * Sitemap Generation
+ * 
+ * This file generates the sitemap.xml for search engines.
+ * The actual logic is in src/lib/sitemap-generator.ts for better maintainability.
+ * 
+ * To add new pages:
+ * 1. For static pages: Edit getStaticPages() in sitemap-generator.ts
+ * 2. For content pages: Edit getContentPages() in sitemap-generator.ts
+ * 3. For dynamic scanning: Implement file system scanning (see comments in helper)
+ */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://docs.dipakrathod.me";
-
-  return [
-    {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/docs`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/docs/projects`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/docs/tutorials`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/docs/workshops`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-  ];
+  return generateSitemap();
 }

@@ -28,6 +28,9 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Dipak Rathod", url: "https://dipakrathod.me" }],
   creator: "Dipak Rathod",
+  alternates: {
+    canonical: "https://docs.dipakrathod.me",
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -66,7 +69,7 @@ export const metadata: Metadata = {
     apple: "/icon.svg",
   },
   verification: {
-    google: "your-google-verification-code",
+    google: "uMaPo0x9ifwxT-qd2XvwCtEE5q3qXeiP3n0y5WvTpaM",
     // yandex: "your-yandex-verification-code",
     // bing: "your-bing-verification-code",
   },
@@ -77,7 +80,7 @@ const navbar = (
     logo={
       <img
         src="/icon.svg"
-        alt="Logo"
+        alt="Dipak Rathod Documentation Hub"
         style={{ height: "32px", width: "auto" }}
         className="dark:invert"
       />
@@ -103,26 +106,78 @@ export default async function RootLayout({
     >
       <Head
       >
-        {/* Structured Data for SEO */}
+        {/* Structured Data for SEO - Enhanced Schema */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "WebSite",
-              name: "Dipak Rathod Documentation Hub",
-              url: "https://docs.dipakrathod.me",
-              description:
-                "Documentation Hub for Cloud, DevOps, and Software Development Projects",
-              author: {
-                "@type": "Person",
-                name: "Dipak Rathod",
-                url: "https://dipakrathod.me",
-              },
-              publisher: {
-                "@type": "Person",
-                name: "Dipak Rathod",
-              },
+              "@graph": [
+                {
+                  "@type": "WebSite",
+                  "@id": "https://docs.dipakrathod.me/#website",
+                  url: "https://docs.dipakrathod.me",
+                  name: "Dipak Rathod Documentation Hub",
+                  description:
+                    "Documentation Hub for Cloud, DevOps, and Software Development Projects",
+                  inLanguage: "en-US",
+                  publisher: {
+                    "@id": "https://docs.dipakrathod.me/#person",
+                  },
+                  potentialAction: {
+                    "@type": "SearchAction",
+                    target: {
+                      "@type": "EntryPoint",
+                      urlTemplate:
+                        "https://docs.dipakrathod.me/search?q={search_term_string}",
+                    },
+                    "query-input": "required name=search_term_string",
+                  },
+                },
+                {
+                  "@type": "Person",
+                  "@id": "https://docs.dipakrathod.me/#person",
+                  name: "Dipak Rathod",
+                  url: "https://dipakrathod.me",
+                  image: "https://docs.dipakrathod.me/icon.svg",
+                  description:
+                    "Cloud & DevOps Engineer specializing in AWS, Docker, Kubernetes, and CI/CD pipelines",
+                  jobTitle: "Cloud & DevOps Engineer",
+                  sameAs: [
+                    "https://github.com/dipakrathod-tech",
+                    "https://www.linkedin.com/in/dipakrathod-tech",
+                    "https://twitter.com/DipakrathodTech",
+                  ],
+                  knowsAbout: [
+                    "Cloud Computing",
+                    "DevOps",
+                    "AWS",
+                    "Docker",
+                    "Kubernetes",
+                    "CI/CD",
+                    "Infrastructure as Code",
+                    "Software Development",
+                  ],
+                },
+                {
+                  "@type": "BreadcrumbList",
+                  "@id": "https://docs.dipakrathod.me/#breadcrumb",
+                  itemListElement: [
+                    {
+                      "@type": "ListItem",
+                      position: 1,
+                      name: "Home",
+                      item: "https://docs.dipakrathod.me",
+                    },
+                    {
+                      "@type": "ListItem",
+                      position: 2,
+                      name: "Documentation",
+                      item: "https://docs.dipakrathod.me/docs",
+                    },
+                  ],
+                },
+              ],
             }),
           }}
         />
