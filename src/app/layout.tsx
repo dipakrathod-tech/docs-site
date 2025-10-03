@@ -36,21 +36,12 @@ export const metadata: Metadata = {
     description:
       "Documentation Hub for Cloud, DevOps, and Software Development Projects. Learn AWS, Docker, Kubernetes, and modern development practices.",
     siteName: "Dipak Rathod Docs",
-    images: [
-      {
-        url: "/icon.svg",
-        width: 1200,
-        height: 630,
-        alt: "Dipak Rathod Documentation Hub",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Dipak Rathod - Cloud & DevOps Engineer",
     description:
       "Documentation Hub for Cloud, DevOps, and Software Development Projects",
-    images: ["/icon.svg"],
     creator: "@DipakrathodTech",
   },
   robots: {
@@ -111,9 +102,6 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <Head
-        faviconGlyph="✦"
-
-        // ... Your additional head options
       >
         {/* Structured Data for SEO */}
         <script
