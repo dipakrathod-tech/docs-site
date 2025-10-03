@@ -12,17 +12,24 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: "/favicon.svg",
+        url: "/icon.svg",
         type: "image/svg+xml",
       },
     ],
-    shortcut: "/favicon.svg",
+    shortcut: "/icon.svg",
   },
 };
  
 const navbar = (
   <Navbar
-    logo={<b>Dipak Rathod</b>}
+    logo={
+      <img 
+        src="/icon.svg" 
+        alt="Logo" 
+        style={{ height: '32px', width: 'auto' }} 
+        className="dark:invert"
+      />
+    }
     projectLink='https://github.com/dipakrathod-tech'
     // ... Your additional navbar options
   />
