@@ -44,3 +44,5 @@ next-env.d.ts
 /docs/SEO_AUDIT_REPORT.md
 /docs/SEO_IMPLEMENTATION_GUIDE.md
 /docs/SEO_*.md
+
+/temp/

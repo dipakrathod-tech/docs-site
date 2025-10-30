@@ -188,7 +188,7 @@ export default async function RootLayout({
           navbar={navbar}
           pageMap={await getPageMap()}
           // docsRepositoryBase="https://github.com/shuding/nextra/tree/main/docs"
-          footer={<Footer />}
+          footer={<Footer key="site-footer" />}
           // ... Your additional layout options
         >
           {children}

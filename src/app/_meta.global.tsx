@@ -11,6 +11,8 @@ const TUTORIALS: MetaRecord = {
 
 }
 
+const WORKSHOPS: MetaRecord = {}
+
 export default { 
     index : {
         type: 'page',
@@ -31,7 +33,14 @@ export default {
             },
             tutorials: {
                 title: 'Tutorials',
-                items: TUTORIALS}
+                items: TUTORIALS
+            },
+            workshops: {
+                title: 'Workshops',
+                items: WORKSHOPS
+            }
+
+            
         }
 
     },
