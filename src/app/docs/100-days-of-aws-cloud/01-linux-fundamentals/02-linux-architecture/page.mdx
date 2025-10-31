@@ -1,0 +1,152 @@
+---
+
+title: 'The GNU/Linux Architecture'
+description: "Deep dive into the GNU/Linux architecture — kernel vs. user space, system calls, and how components interact; practical context for cloud engineers on the 100-day AWS learning path."
+tags: ["Linux", "Architecture", "AWS", "Cloud", "Learning"]
+
+---
+
+import { Steps } from "nextra/components";
+
+## The GNU/Linux Architecture
+
+In the previous article, we established that a functional GNU/Linux operating system is the combination of the **Linux Kernel** and the **GNU tools**.
+
+The "architecture" of an OS describes how these components are layered and how they interact. The most fundamental concept in the GNU/Linux architecture is the strict separation between two primary modes of operation: **Kernel Space** and **User Space**.
+
+This separation is the key to the system's stability. A crashing user application (in User Space) cannot bring down the entire operating system (which runs in Kernel Space).
+
+---
+
+## 1. Kernel Space
+
+Think of Kernel Space as a protected, privileged area where the core of the operating system lives and works.
+
+- **What is it?** The memory space where the **Linux Kernel** runs.
+- **Privileges:** Code running in Kernel Space has direct, unrestricted access to all the computer's hardware (CPU, memory, disks, network cards, etc.).
+- **What it does:** This is where the kernel performs its core tasks:
+  - **Process Management:** Deciding which application gets to use the CPU and for how long.
+  - **Memory Management:** Allocating and protecting system memory.
+  - **Device Drivers:** The kernel includes drivers that act as "translators" between the hardware and the software.
+  - **System Calls:** Manages the interface that User Space applications use to request services.
+
+## 2. User Space
+
+Think of User Space as the non-privileged, isolated area where all your applications run.
+
+- **What is it?** The memory space where everything _except_ the kernel runs.
+- **Privileges:** Code running in User Space has **no** direct access to hardware. If an application wants to do _anything_—like read a file, send a network packet, or even print to the screen—it must ask the kernel to do it.
+- **What runs here:**
+  - **Applications:** Web browsers, text editors, servers (like Apache), and your own scripts.
+  - **GNU Utilities:** The commands you use every day, like `ls`, `cp`, `mv`, and the `bash` shell itself.
+  - **Libraries:** Collections of code that applications share (e.g., `glibc`, `libcurl`).
+  - **Desktop Environments:** The entire graphical user interface (GUI), like GNOME or KDE.
+
+---
+
+## The Bridge: System Calls & `glibc`
+
+So, how does a User Space application (like `ls`) ask the Kernel to read the contents of a directory? It uses a **System Call**.
+
+1.  **The "Syscall" Interface:** This is the _only_ bridge between User Space and Kernel Space. It's a strictly defined set of functions the kernel exposes.
+2.  **The Problem:** Raw system calls are complex and often written in assembly language.
+3.  **The Solution: `glibc`:** The **GNU C Library (`glibc`)** provides a user-friendly wrapper around these system calls.
+
+When a developer uses a simple C function like `printf()` (to write to the screen) or `open()` (to open a file), `glibc` takes that simple command and translates it into the complex system call the kernel understands.
+
+---
+
+## Architecture at a Glance: Layers and Components
+
+To summarize, here is a visual representation of the GNU/Linux architectural layers, followed by a breakdown of the key components from the bottom up.
+
+![GNU/Linux Architecture Diagram](/100-days-of-cloud/linux/gnu-linux-architecture.png)
+
+1.  **Hardware:** The physical foundation (CPU, RAM, Disks, Network Interfaces).
+2.  **Linux Kernel (Kernel Space):** The core manager, directly interfacing with hardware and providing essential services.
+3.  **GNU C Library (`glibc`, User Space):** The fundamental library that applications use to interact with the kernel via system calls.
+4.  **Other Libraries (User Space):** Shared code modules that provide additional functionality to applications.
+5.  **Shells & Utilities (User Space):** Command-line interfaces like `bash` and essential tools like `ls`, `cp`, `mv`.
+6.  **Applications (User Space):** User-facing programs such as web browsers (Firefox), text editors (Vim), and web servers (Apache).
+7.  **Desktop Environment (User Space):** The graphical interface you interact with (e.g., GNOME, KDE).
+
+### Example: What Happens When You Type `ls`?
+
+This step-by-step example shows the full architecture in action, moving between User Space and Kernel Space.
+
+<Steps>
+
+<step>
+  ### 1. You type `ls` in the shell You are interacting with a User Space
+  application (like `bash`). The shell reads your command.
+</step>
+
+<step>
+  ### 2. The shell `fork()`s The `bash` shell needs to run the `ls` program.
+  First, it calls the `fork()` system call. This crosses the bridge to **Kernel
+  Space** and tells the kernel to create a new child process that is an
+  identical copy of the shell.
+</step>
+
+<step>
+  ### 3. The child process `exec()`s The new child process (still in **User
+  Space**) immediately calls the `exec()` system call. This tells the kernel to
+  "execute a new program." The kernel finds the `ls` binary on disk (e.g., at
+  `/bin/ls`) and loads it into the child process's memory, replacing the copy of
+  the shell. The process is now the `ls` program.
+</step>
+
+<step>
+  ### 4. `ls` calls `glibc` (User Space) The `ls` program needs to read the
+  contents of the current directory. It can't access the disk directly. It calls
+  a standard function from the **`glibc`** library (e.g., `readdir()`), all
+  within **User Space**.
+</step>
+
+<step>
+  ### 5. `glibc` calls the Kernel (System Call) `glibc` translates the simple
+  `readdir()` function into a specific **system call** (like `getdents64`). This
+  call crosses the bridge from User Space into **Kernel Space**, formally asking
+  the kernel for the directory contents.
+</step>
+
+<step>
+  ### 6. Kernel gets the data The Kernel (now in **Kernel Space**) takes over.
+  Its VFS (Virtual File System) layer and filesystem drivers (e.g., `ext4`)
+  interact with the hardware disk drivers to read the raw directory data from
+  the disk.
+</step>
+
+<step>
+  ### 7. Kernel returns data to `ls` The Kernel passes the directory data back
+  across the bridge to the `ls` process, which is waiting in **User Space**.
+</step>
+
+<step>
+  ### 8. `ls` needs to print the data The `ls` program (User Space) formats the
+  file names into a string. It now needs to print this string to your screen. It
+  calls another `glibc` function, `write()`.
+</step>
+
+<step>
+  ### 9. `glibc` calls the Kernel *again* `glibc` translates the `write()`
+  function into a `write()` **system call**. This crosses the bridge into
+  **Kernel Space** *again*, handing the string of text to the kernel and telling
+  it to send it to "standard output."
+</step>
+
+<step>
+  ### 10. Kernel prints to the terminal The Kernel (Kernel Space) receives the
+  text. It sees that "standard output" is your terminal and uses the TTY
+  (terminal) driver to send the text to your terminal application. The terminal
+  application (User Space) renders the text, and you see your file list.
+</step>
+
+<step>
+  ### 11. `ls` exits and shell returns The `ls` program finishes its job and
+  makes a final system call, `exit()`. The Kernel cleans up the process. The
+  original `bash` shell, which was waiting, is notified that its child is done
+  and finally prints a new command prompt.
+</step>
+
+</Steps>
