@@ -1,0 +1,288 @@
+---
+title: "Linux Filesystems"
+description: "A comprehensive guide to understanding Linux filesystems — from filesystem types and partitions to the Filesystem Hierarchy Standard (FHS). Essential knowledge for navigating and managing Linux systems in cloud environments."
+tags:
+  [
+    "Linux",
+    "Filesystem",
+    "FHS",
+    "System Administration",
+    "AWS",
+    "Cloud",
+    "DevOps",
+  ]
+---
+
+import { Callout, Steps, Table } from "nextra/components";
+
+## What is a Linux Filesystem?
+
+Just as libraries organize books into sections, Linux uses **filesystems** to store and organize data in a human-usable form.
+
+A **filesystem** is the method and data structure an operating system uses to store, organize, name, and retrieve files on a storage device.
+
+<Callout type="info">
+  **Why This Matters:** As a Cloud or DevOps professional, you'll constantly
+  navigate Linux filesystems to configure services, troubleshoot issues, manage
+  logs, and deploy applications. Understanding the standard layout and
+  filesystem concepts will make you significantly more efficient.
+</Callout>
+
+## Common Linux Filesystems
+
+Linux is versatile and supports many filesystem types, but in a modern cloud and server environment, you'll primarily encounter these:
+
+- **ext4 (Fourth Extended Filesystem):** The most common default filesystem for many Linux distributions. It's a robust, reliable, and well-tested journaling filesystem.
+- **XFS:** A high-performance 64-bit journaling filesystem created by SGI. It's excellent for large files and parallel I/O, making it the default for Red Hat Enterprise Linux (RHEL) and its derivatives.
+- **Btrfs (B-tree Filesystem):** A modern copy-on-write (CoW) filesystem with advanced features like snapshots, integrated volume management, and data integrity checking.
+
+You will also see special-purpose "virtual" filesystems that provide interfaces to kernel data, not actual disk storage:
+
+- **procfs (`/proc`):** A virtual filesystem providing detailed information about system processes and kernel status.
+- **sysfs (`/sys`):** A virtual filesystem that exposes kernel objects, their attributes, and relationships, especially for hardware devices.
+- **tmpfs:** A temporary filesystem that lives entirely in memory (RAM), making it extremely fast for transient files (e.g., in `/tmp` or `/run`).
+
+<Callout type="info">
+  **Pro Tip:** In AWS, when you attach an EBS (Elastic Block Store) volume to an
+  EC2 instance, you must format it with one of these filesystems (typically
+  **ext4** or **XFS**) before you can "mount" and use it.
+</Callout>
+
+## Partitions vs. Filesystems
+
+- **Partition:** A partition is a logical, dedicated _subsection_ of a physical storage device (like a hard drive, SSD, or cloud volume). Think of it as an empty, walled-off room.
+- **Filesystem:** A filesystem is the _set of rules and structures_ for organizing files within that partition. It's the set of shelves, labels, and an index you install _inside_ the room.
+
+<Callout type="default">
+  **Key Concept:** A filesystem **resides within** a partition. You can't store
+  files on a partition until you've formatted it with a filesystem.
+</Callout>
+
+## Windows vs. Linux: Filesystem Comparison
+
+The mental model for filesystems in Linux is very different from Windows.
+
+| Component            | Windows                   | Linux                      |
+| -------------------- | ------------------------- | -------------------------- |
+| **Partition ID**     | `Disk1`, `Disk2`          | `/dev/sda1`, `/dev/xvdf`   |
+| **Filesystem Type**  | NTFS, VFAT, exFAT         | ext4, XFS, Btrfs           |
+| **Access Method**    | Drive Letter (`C:`, `D:`) | Mount Point (`/`, `/data`) |
+| **Path Separator**   | Backslash (`\`)           | Forward Slash (`/`)        |
+| **Case Sensitivity** | **No** (Case-insensitive) | **Yes** (Case-sensitive)   |
+| **Root**             | `C:\`                     | `/` (a single root)        |
+
+**Key Differences to Remember:**
+
+1.  **No Drive Letters:** Linux does not use drive letters. Instead, everything exists under a single unified tree starting from the root directory (`/`). Other partitions and devices are "mounted" (attached) as directories onto this tree.
+2.  **Case-Sensitive:** This is critical. On Linux, `file.txt`, `File.txt`, and `FILE.TXT` are **three completely different files**.
+3.  **Forward Slashes:** Paths use `/`, not `\`.
+
+## The Filesystem Hierarchy Standard (FHS)
+
+Linux systems organize their files according to a standard layout called the **Filesystem Hierarchy Standard (FHS)**. This standardization ensures that you can move between different distributions (like Ubuntu, RHEL, or Fedora) and still know where to find critical files.
+
+<Callout type="info">
+  **Official Documentation:** For the complete specification, refer to the
+  [Filesystem Hierarchy
+  Standard](https://refspecs.linuxfoundation.org/fhs.shtml) maintained by the
+  Linux Foundation.
+</Callout>
+
+### The Root (`/`) Directory
+
+Everything in Linux starts at the **root directory**, denoted by `/`. All other directories branch out from here.
+
+### Standard Directory Structure
+
+```bash
+/
+├── bin/          # Essential user command binaries (often a link to /usr/bin)
+├── boot/         # Boot loader files, kernel, initramfs
+├── dev/          # Device files
+├── etc/          # System-wide configuration files
+├── home/         # User home directories
+├── lib/          # Essential shared libraries (often a link to /usr/lib)
+├── media/        # (Legacy) Mount points for removable media
+├── mnt/          # Temporary manual mount points
+├── opt/          # Optional/third-party software
+├── proc/         # Virtual filesystem for process information
+├── root/         # Root user's home directory
+├── run/          # Runtime data, including modern auto-mounts
+├── sbin/         # Essential system binaries (often a link to /usr/sbin)
+├── srv/          # Data for services provided by the system
+├── sys/          # Virtual filesystem for kernel/device info
+├── tmp/          # Temporary files
+├── usr/          # Secondary hierarchy for user programs
+└── var/          # Variable data (logs, databases, caches)
+```
+
+### The Modern `/usr` Merge
+
+On almost all modern Linux distributions (RHEL 7+, Ubuntu 18.04+, Debian 10+), you'll notice that `/bin`, `/sbin`, and `/lib` are actually **symbolic links** (shortcuts) to their counterparts inside `/usr`:
+
+- `/bin` → `/usr/bin`
+- `/sbin` → `/usr/sbin`
+- `/lib` → `/usr/lib`
+- `/lib64` → `/usr/lib64`
+
+**Why?** This "usrmerge" simplifies the filesystem. Historically, the base directories (`/bin`, `/lib`) held only the _absolute minimum_ files needed to boot the system, in case the `/usr` partition (which could be on a separate disk) failed to mount.
+
+With modern, reliable storage and initramfs, this separation is no longer necessary. Consolidating all binaries and libraries into `/usr` makes the system easier to manage, snapshot, and secure.
+
+### Key Directories Explained
+
+#### `/` (Root)
+
+The top-level directory. Everything is nested under it.
+
+#### `/boot` (Boot Loader Files)
+
+Contains everything needed to boot the system:
+
+- Linux kernel (`vmlinuz`)
+- Initial RAM disk (`initramfs`)
+- GRUB bootloader configuration
+
+#### `/dev` (Device Files)
+
+Contains special files that represent hardware devices:
+
+- `/dev/sda1` - First partition on the first disk
+- `/dev/null` - A "black hole" that discards all data written to it
+- `/dev/random` - Random number generator
+
+#### `/etc` (Configuration Files)
+
+Contains system-wide configuration files. This is one of the most important directories you'll work in.
+
+- `/etc/passwd` - User account information
+- `/etc/fstab` - Filesystem mount configuration
+- `/etc/ssh/sshd_config` - SSH server configuration
+
+<Callout type="warning">
+  **Important:** The `/etc` directory is critical. Always back up configuration
+  files before modifying them.
+</Callout>
+
+#### `/home` (User Home Directories)
+
+Contains personal directories for each user (e.g., `/home/dipak`). This is where users store their personal files, dotfiles (`.bashrc`), and application settings.
+
+#### `/lib` and `/lib64` (Shared Libraries)
+
+Contains essential shared libraries (like DLLs in Windows) needed by the binaries in `/bin` and `/sbin`. On modern systems, these are links to `/usr/lib` and `/usr/lib64`.
+
+#### `/mnt` and `/media` (Mount Points)
+
+- **/mnt:** The standard, "old-school" temporary mount point. This is where _you_, the administrator, would manually mount a filesystem (e.g., `mount /dev/sdb1 /mnt`).
+- **/media:** A legacy directory that was once used for automatic mounts of removable media like CD-ROMs.
+
+#### `/opt` (Optional Software)
+
+Reserved for optional, third-party software packages that don't follow the standard FHS (e.g., Google Chrome, Slack) and those are self-contained.
+
+#### `/proc` (Process Information)
+
+A virtual filesystem that provides real-time information about running processes and kernel parameters.
+
+- `/proc/cpuinfo` - CPU information
+- `/proc/meminfo` - Memory information
+- `/proc/[pid]/` - A directory for each running process, identified by its Process ID.
+
+#### `/root` (Root Home Directory)
+
+The home directory for the **root** (superuser) account. It's separate from `/home` to ensure the root user can log in even if the `/home` partition is unavailable.
+
+#### `/run` (Runtime Data)
+
+A `tmpfs` (in-memory) filesystem that stores volatile runtime data for processes since the last boot.
+
+- This is the **modern** location for automatic mounts. When you plug in a USB drive, it will likely appear in `/run/media/yourusername/disklabel`.
+- Contains PID files, socket files, etc.
+
+#### `/sbin` (System Binaries)
+
+Contains essential system administration binaries, generally intended to be run by the root user.
+
+- `fsck` (filesystem check), `reboot`, `shutdown`
+- On modern systems, this is a link to `/usr/sbin`.
+
+#### `/sys` (Sysfs Filesystem)
+
+A virtual filesystem that provides a structured view of kernel objects, hardware devices, and drivers.
+
+#### `/tmp` (Temporary Files)
+
+A world-writable directory for temporary files created by applications and users. Files here are often deleted on reboot.
+
+#### `/usr` (User Programs)
+
+Contains the majority of user-land programs and data.
+
+- `/usr/bin/`: Main location for most user-executable commands (e.g., `python3`, `git`, `nano`).
+- `/usr/lib/`: Libraries for the programs in `/usr/bin`.
+- `/usr/local/`: Location for software you manually compile and install locally using `make`, keeping it separate from system-managed packages.
+- `/usr/share/`: Architecture-independent data (documentation, icons, timezones).
+
+<Callout type="info">
+  **Historical Note:** The `/usr` directory originally stood for "user," as it
+  held user programs separate from system essentials. In modern Linux, it's
+  better understood as the location for the bulk of the operating system's
+  programs, libraries, and documentation.
+</Callout>
+
+#### `/var` (Variable Data)
+
+Contains variable data files that change during system operation. This is another critical directory for system administrators.
+
+- **/var/log/**: System and application log files.
+- `/var/cache/`: Application cache data.
+- `/var/www/`: Default location for web server content.
+- `/var/lib/`: State information for applications (e.g., database files).
+
+<Callout type="info">
+  **DevOps Tip:** The `/var/log/` directory is your best friend. When a service
+  fails, this is the first place you should look for error messages.
+</Callout>
+
+## Practical Navigation and Inspection
+
+```bash
+# List root directory contents
+ls /
+
+# Display detailed information (permissions, owner, size)
+ls -la /
+
+# Display a one-level tree of the root (install 'tree' if needed)
+tree -L 1 /
+
+# Find out where an executable is located
+which python3
+# Output: /usr/bin/python3
+
+# Check disk space usage by filesystem (Human-readable)
+df -h
+
+# Check disk usage (Summarize, Human-readable) of the log directory
+du -sh /var/log/
+```
+
+## Summary
+
+1.  A **filesystem** is the method for organizing data on a **partition**.
+2.  Linux uses a **single-root (`/`)** directory tree and is **case-sensitive**.
+3.  The **Filesystem Hierarchy Standard (FHS)** provides a consistent layout.
+4.  **Modern systems** have "merged" `/bin`, `/sbin`, and `/lib` into `/usr`, using symlinks for compatibility.
+5.  For a DevOps role, the most critical directories to know are:
+    - `/etc` (config)
+    - `/var/log` (logs)
+    - `/usr/bin` (binaries)
+    - `/home` (user files)
+    - `/tmp` (temp files)
+
+<Callout type="success">
+  **Next Steps:** Now that you understand the filesystem *layout*, the next
+  logical topics are file/directory management commands and understanding file
+  permissions and ownership.
+</Callout>
