@@ -1,0 +1,1267 @@
+---
+title: "Command Line Essentials"
+description: "Master the Linux command line fundamentals — understanding bash command syntax, shell prompts, command history, tab completion, and essential navigation commands for effective system interaction."
+tags:
+  ["Linux", "Command Line", "Bash", "CLI", "Shell", "AWS", "Cloud", "DevOps"]
+---
+
+import { Callout, Steps, Tabs } from "nextra/components";
+
+## Command Line Essentials
+
+Now that you understand how to access Linux systems through various interfaces, it's time to dive deep into the command line itself. The command line is where the real power of Linux lies, and mastering these essentials is crucial for any Cloud or DevOps professional.
+
+In this section, we'll explore the fundamental building blocks of command-line interaction: understanding command syntax, using the shell prompt effectively, leveraging command history, and mastering essential navigation commands.
+
+<Callout type="info">
+  **Why This Matters:** In cloud environments, you'll rarely have access to a
+  GUI. Nearly all server management, troubleshooting, and automation happens
+  through the command line. These fundamentals form the foundation of everything
+  you'll do in Linux.
+</Callout>
+
+---
+
+## Basic Command Syntax
+
+The **GNU Bourne-Again Shell (bash)** is a program that interprets commands that you type. Understanding how bash parses your input is essential to using it effectively.
+
+### Command Structure
+
+Each string that you type into the shell can have up to three parts:
+
+1. **Command**: The name of the program to execute
+2. **Options**: Flags that modify the command's behavior (usually begin with `-` or `--`)
+3. **Arguments**: Additional information the command needs (like file names)
+
+**Basic Syntax:**
+
+```bash
+command [options] [arguments]
+```
+
+Each word is separated by spaces. When you're ready to execute a command, press the **Enter** key.
+
+**Example:**
+
+```bash copy
+whoami
+```
+
+Output:
+
+```
+user
+```
+
+In this example:
+
+- `whoami` is the **command**
+- It has no options or arguments
+- The output (`user`) is displayed before the next prompt appears
+
+<Callout type="default">
+  **The Prompt:** The string `[user@host ~]$` is your shell prompt. It shows: -
+  **user**: Your username - **host**: The hostname of your machine - **~**: Your
+  current directory (`~` represents your home directory) - **$**: Indicates
+  you're a regular user (`#` would indicate root/superuser)
+</Callout>
+
+### Multiple Commands on One Line
+
+To execute multiple commands on a single line, use the semicolon (`;`) as a command separator. The semicolon is a **metacharacter** — a character with special meaning to bash.
+
+**Syntax:**
+
+```bash
+command1 ; command2
+```
+
+**Example:**
+
+```bash copy
+date ; whoami
+```
+
+Output:
+
+```
+Sun Nov 12 08:32:42 PM EST 2025
+user
+```
+
+Both commands execute in sequence, and their output is displayed before the next prompt.
+
+---
+
+## Understanding `sudo`: Running Commands with Privileges
+
+As you work with Linux, you'll quickly find that some commands fail with a "Permission denied" error. This is by design. Linux is a multi-user system that protects itself by restricting sensitive operations to privileged users. This is known as the **principle of least privilege**.
+
+The `sudo` (**superuser do**) command is the standard way to execute a command with administrative (or "root") privileges.
+
+**Syntax:**
+
+```bash
+sudo [command]
+```
+
+When you run a command with `sudo`, the system will typically ask for _your_ password to confirm that you have the authority to perform the action.
+
+**Example:**
+
+Trying to view a protected log file will fail for a regular user:
+
+```bash copy
+cat /var/log/secure
+```
+
+Output:
+
+```
+cat: /var/log/secure: Permission denied
+```
+
+Using `sudo` allows the command to succeed:
+
+```bash copy
+sudo cat /var/log/secure
+```
+
+Output:
+
+```
+[sudo] password for user:
+Nov 12 15:20:33 host sshd[1234]: Accepted publickey for user from 1.2.3.4 port 5678
+...
+```
+
+<Callout type="warning">
+  **Use `sudo` with caution.** Running commands as root gives them full power
+  over the system. A typo in a `sudo` command can have serious consequences,
+  like accidentally deleting critical system files. Always double-check your
+  commands before running them with `sudo`.
+</Callout>
+
+---
+
+## Write Simple Commands
+
+Let's explore some fundamental commands you'll use daily.
+
+### The `date` Command
+
+The `date` command displays the current date and time. You can also format the output using format strings with the plus sign (`+`).
+
+**Basic usage:**
+
+```bash copy
+date
+```
+
+Output:
+
+```
+Sun Nov 12 08:32:42 PM EST 2025
+```
+
+**Formatted output:**
+
+```bash copy
+date +%R
+```
+
+Output:
+
+```
+20:33
+```
+
+```bash copy
+date +%x
+```
+
+Output:
+
+```
+11/12/2025
+```
+
+```bash copy
+date +%Y-%m-%d
+```
+
+Output:
+
+```
+2025-11-12
+```
+
+<Callout type="info">
+  **Format Codes:** - `%R`: Hour and minute (HH:MM) - `%x`: Locale's date
+  representation - `%Y`: Year (4 digits) - `%m`: Month (01-12) - `%d`: Day of
+  month (01-31) Run `man date` to see all format options.
+</Callout>
+
+### The `passwd` Command
+
+The `passwd` command changes your password. When you run it without options, it changes the current user's password.
+
+```bash copy
+passwd
+```
+
+Output:
+
+```
+Changing password for user user.
+Current password: old_password
+New password: new_password
+Retype new password: new_password
+passwd: all authentication tokens updated successfully.
+```
+
+<Callout type="warning">
+  **Password Requirements:** By default, `passwd` requires a strong password: -
+  Mix of lowercase and uppercase letters - Include numbers and symbols - Not
+  based on dictionary words - Minimum length (usually 8+ characters)
+</Callout>
+
+**Note:** A superuser or privileged user can use `passwd username` to change another user's password.
+
+### The `echo` Command
+
+The `echo` command is one of the simplest and most widely used commands. It displays a line of text or the value of a variable.
+
+**Display a simple message:**
+
+```bash copy
+echo "Hello, World!"
+```
+
+Output:
+
+```
+Hello, World!
+```
+
+**Display the value of a variable (like the user's home directory):**
+
+```bash copy
+echo $HOME
+```
+
+Output:
+
+```
+/home/user
+```
+
+### The `clear` Command
+
+The `clear` command does exactly what its name implies: it clears your terminal screen. This is useful for cleaning up a cluttered screen before running a new command.
+
+```bash copy
+clear
+```
+
+After running this, your prompt will be at the top of a fresh, empty screen.
+
+<Callout type="info">
+  The `clear` command is functionally the same as the **Ctrl+L** keyboard
+  shortcut.
+</Callout>
+
+### The `touch` Command
+
+The `touch` command is the standard way to create a new, empty file. It can also be used to update the access and modification timestamps of an existing file.
+
+**Create a new empty file:**
+
+```bash copy
+touch new_file.txt
+```
+
+You can verify the file was created with `ls`:
+
+```bash copy
+ls
+```
+
+Output:
+
+```
+Desktop  Documents  Downloads  Music  new_file.txt  Pictures  Videos
+```
+
+This is useful when you need to create a file to write to or for other programs to use, without needing to open a text editor.
+
+---
+
+## Essential Navigation Commands
+
+Before diving into viewing files, let's learn the most fundamental navigation commands.
+
+### The `pwd` Command
+
+**Print Working Directory** — shows your current location in the filesystem:
+
+```bash copy
+pwd
+```
+
+Output:
+
+```
+/home/user
+```
+
+<Callout type="default">
+  **Why It's Useful:** When you're deep in a directory hierarchy, `pwd` quickly
+  reminds you where you are. This is especially helpful when working with
+  relative paths.
+</Callout>
+
+### The `ls` Command
+
+**List** — displays the contents of a directory. This is one of the most frequently used commands in Linux.
+
+**Basic usage:**
+
+```bash copy
+ls
+```
+
+Output:
+
+```
+Desktop  Documents  Downloads  Music  Pictures  Videos
+```
+
+**List with details (long format):**
+
+```bash copy
+ls -l
+```
+
+Output:
+
+```
+total 24
+drwxr-xr-x 2 user user 4096 Nov 12 10:00 Desktop
+drwxr-xr-x 2 user user 4096 Nov 12 10:00 Documents
+drwxr-xr-x 2 user user 4096 Nov 12 10:00 Downloads
+drwxr-xr-x 2 user user 4096 Nov 12 10:00 Music
+drwxr-xr-x 2 user user 4096 Nov 12 10:00 Pictures
+drwxr-xr-x 2 user user 4096 Nov 12 10:00 Videos
+```
+
+**List all files (including hidden files):**
+
+```bash copy
+ls -a
+```
+
+Output:
+
+```
+.  ..  .bashrc  .profile  Desktop  Documents  Downloads
+```
+
+**List with details and hidden files:**
+
+```bash copy
+ls -la
+```
+
+**List in human-readable format:**
+
+```bash copy
+ls -lh
+```
+
+Output:
+
+```
+total 24K
+drwxr-xr-x 2 user user 4.0K Nov 12 10:00 Desktop
+drwxr-xr-x 2 user user 4.0K Nov 12 10:00 Documents
+drwxr-xr-x 2 user user 4.0K Nov 12 10:00 Downloads
+```
+
+**Common `ls` options:**
+
+| Option | Description                              |
+| ------ | ---------------------------------------- |
+| `-l`   | Long format (detailed information)       |
+| `-a`   | Show all files (including hidden files)  |
+| `-h`   | Human-readable sizes (KB, MB, GB)        |
+| `-t`   | Sort by modification time (newest first) |
+| `-r`   | Reverse order                            |
+| `-R`   | Recursive (list subdirectories)          |
+| `-S`   | Sort by file size                        |
+
+<Callout type="info">
+  **Hidden Files:** In Linux, files and directories that start with a dot (`.`)
+  are hidden. Use `ls -a` to see them. Common examples include `.bashrc`,
+  `.bash_history`, and `.ssh/`.
+</Callout>
+
+### The `cd` Command
+
+**Change Directory** — navigates to a different directory:
+
+**Go to a specific directory:**
+
+```bash copy
+cd /etc
+```
+
+```bash copy
+pwd
+```
+
+Output:
+
+```
+/etc
+```
+
+**Go to home directory:**
+
+```bash copy
+cd
+```
+
+```bash copy
+pwd
+```
+
+Output:
+
+```
+/home/user
+```
+
+Or explicitly:
+
+```bash copy
+cd ~
+```
+
+**Go to previous directory:**
+
+First, let's navigate somewhere:
+
+```bash copy
+cd /var/log
+```
+
+```bash copy
+pwd
+```
+
+Output:
+
+```
+/var/log
+```
+
+Now go back to home:
+
+```bash copy
+cd ~
+```
+
+```bash copy
+pwd
+```
+
+Output:
+
+```
+/home/user
+```
+
+Now switch back to the previous directory:
+
+```bash copy
+cd -
+```
+
+```bash copy
+pwd
+```
+
+Output:
+
+```
+/var/log
+```
+
+**Go up one directory level:**
+
+```bash copy
+pwd
+```
+
+Output:
+
+```
+/var/log
+```
+
+```bash copy
+cd ..
+```
+
+```bash copy
+pwd
+```
+
+Output:
+
+```
+/var
+```
+
+**Go up multiple directory levels:**
+
+```bash copy
+pwd
+```
+
+Output:
+
+```
+/var/log/httpd
+```
+
+```bash copy
+cd ../../
+```
+
+```bash copy
+pwd
+```
+
+Output:
+
+```
+/var
+```
+
+<Callout type="info">
+  **Special Directory Symbols:** - `.` (single dot) = Current directory - `..`
+  (double dot) = Parent directory - `~` (tilde) = Your home directory - `-`
+  (dash) = Previous directory
+</Callout>
+
+---
+
+## View the Contents of Files
+
+Understanding how to view file contents is essential for reading configuration files, logs, and scripts.
+
+### The `cat` Command
+
+The `cat` (concatenate) command is one of the most frequently used commands in Linux. It can:
+
+- Display file contents
+- Create files
+- Concatenate multiple files
+- Redirect output
+
+**View a single file:**
+
+```bash copy
+cat /etc/passwd
+```
+
+Output:
+
+```
+root:x:0:0:root:/root:/bin/bash
+bin:x:1:1:bin:/bin:/sbin/nologin
+daemon:x:2:2:daemon:/sbin:/sbin/nologin
+adm:x:3:4:adm:/var/adm:/sbin/nologin
+...output omitted...
+```
+
+**View multiple files:**
+
+```bash copy
+cat file1 file2
+```
+
+Output:
+
+```
+Hello World!!
+Introduction to Linux commands.
+```
+
+<Callout type="default">
+  **Limitation:** The `cat` command dumps the entire file to the terminal. For
+  long files, the content scrolls past too quickly to read. Use pagers like
+  `less` or `more` for longer files.
+</Callout>
+
+### File Pagers: `more` and `less`
+
+When files are too long to fit on one screen, pagers allow you to view them one page at a time.
+
+#### The `more` Command
+
+The `more` command is the original Unix pager. It displays file contents one screen at a time and allows forward navigation.
+
+```bash copy
+more /etc/services
+```
+
+**Navigation in `more`:**
+
+| Key          | Action                                  |
+| ------------ | --------------------------------------- |
+| **Space**    | Move forward one screen                 |
+| **Enter**    | Move forward one line                   |
+| **b**        | Move backward one screen (if supported) |
+| **/pattern** | Search forward for pattern              |
+| **n**        | Repeat previous search                  |
+| **q**        | Quit                                    |
+| **h**        | Display help                            |
+
+<Callout type="default">
+  **Note:** The `more` command is simpler but less powerful than `less`. It's
+  primarily useful for quick viewing when you don't need advanced navigation.
+</Callout>
+
+#### The `less` Command
+
+The `less` command is an improved pager with more features and better navigation. It's the preferred choice for viewing files.
+
+```bash copy
+less /var/log/messages
+```
+
+**Navigation in `less`:**
+
+| Key                    | Action                      |
+| ---------------------- | --------------------------- |
+| **Space** or **PgDn**  | Move forward one screen     |
+| **PgUp** or **b**      | Move backward one screen    |
+| **UpArrow** or **k**   | Move up one line            |
+| **DownArrow** or **j** | Move down one line          |
+| **g**                  | Jump to beginning of file   |
+| **G**                  | Jump to end of file         |
+| **/pattern**           | Search forward for pattern  |
+| **?pattern**           | Search backward for pattern |
+| **n**                  | Repeat previous search      |
+| **N**                  | Repeat search in reverse    |
+| **q**                  | Quit                        |
+| **h**                  | Display help                |
+
+<Callout type="success">
+  **Pro Tip:** The name `less` comes from the saying "less is more" — it's an
+  improved version of the `more` command with more features and better
+  navigation. The irony is intentional!
+</Callout>
+
+**Why use `less` over `more`?**
+
+- Backward navigation (can scroll up)
+- Search in both directions
+- Faster for large files (doesn't read entire file at startup)
+- More keyboard shortcuts and features
+- Can view compressed files with `zless`
+
+### The `head` and `tail` Commands
+
+These commands display the beginning (`head`) or end (`tail`) of a file. By default, they show 10 lines.
+
+**Display first 10 lines:**
+
+```bash copy
+head /etc/passwd
+```
+
+Output:
+
+```
+root:x:0:0:root:/root:/bin/bash
+bin:x:1:1:bin:/bin:/sbin/nologin
+daemon:x:2:2:daemon:/sbin:/sbin/nologin
+...
+```
+
+**Display first 5 lines:**
+
+```bash copy
+head -n 5 /etc/passwd
+```
+
+**Display last 10 lines:**
+
+```bash copy
+tail /var/log/messages
+```
+
+**Display last 20 lines:**
+
+```bash copy
+tail -n 20 /var/log/messages
+```
+
+**Follow a file in real-time (useful for logs):**
+
+```bash copy
+tail -f /var/log/messages
+```
+
+<Callout type="info">
+  **DevOps Use Case:** The `tail -f` command is invaluable for monitoring log
+  files in real-time. It continuously displays new lines as they're added to the
+  file. Press **Ctrl+C** to stop following.
+</Callout>
+
+---
+
+## Understand Tab Completion
+
+**Tab completion** is one of the most powerful productivity features in bash. It helps you:
+
+- Complete commands quickly
+- Avoid typos
+- Discover available options
+- Complete file and directory names
+
+### How It Works
+
+1. Type the first few characters of a command or file name
+2. Press **Tab**
+3. If unique, bash completes it automatically
+4. If not unique, press **Tab** twice to see all possibilities
+
+**Example: Command Completion**
+
+Type the beginning of a command and press **Tab**:
+
+```bash
+use<Tab>
+```
+
+If only one command starts with "use", bash completes it automatically to `useradd`.
+
+If multiple commands start with "use", pressing **Tab** twice shows them all:
+
+```bash
+use<Tab><Tab>
+useradd    userdel    usermod
+```
+
+**Example: Option Completion**
+
+Many commands support tab completion for their options:
+
+```bash
+useradd --<Tab><Tab>
+--badnames          --gid               --no-log-init       --shell
+--base-dir          --groups            --non-unique        --skel
+--btrfs-subvolume-home --help           --no-user-group     --system
+--comment           --home-dir          --password          --uid
+--create-home       --inactive          --prefix            --user-group
+--defaults          --key               --root
+--expiredate        --no-create-home    --selinux-user
+```
+
+**Example: File Name Completion**
+
+```bash copy
+cat /etc/pass<Tab>
+```
+
+Completes to:
+
+```bash
+cat /etc/passwd
+```
+
+<Callout type="success">
+  **Best Practice:** Make tab completion a habit. It will save you countless
+  hours of typing and prevent many typos. Professional Linux users rely on it
+  constantly.
+</Callout>
+
+---
+
+## Display the Command History
+
+Bash keeps a record of commands you've executed, making it easy to recall and rerun them without retyping.
+
+### The `history` Command
+
+The `history` command displays a numbered list of previously executed commands:
+
+```bash copy
+history
+```
+
+Output:
+
+```
+    1  date
+    2  whoami
+    3  cat /etc/passwd
+    4  less /var/log/messages
+    5  pwd
+    6  cd /etc
+    7  ls -la
+    8  history
+```
+
+### History Expansion with `!`
+
+The exclamation point (`!`) is a metacharacter for **history expansion** — it lets you rerun previous commands without retyping them.
+
+#### `!number` - Execute Command by Number
+
+Run a specific command from history by its number:
+
+```bash copy
+!3
+```
+
+Output:
+
+```
+cat /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+...
+```
+
+#### `!string` - Execute Most Recent Command Starting with String
+
+Run the most recent command that starts with a specific string:
+
+```bash copy
+!cat
+```
+
+Output:
+
+```
+cat /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+...
+```
+
+#### `!!` - Execute Previous Command
+
+The `!!` expansion reruns the last command:
+
+```bash copy
+cat /etc/shadow
+```
+
+Output:
+
+```
+cat: /etc/shadow: Permission denied
+```
+
+```bash copy
+sudo !!
+```
+
+Output:
+
+```
+sudo cat /etc/shadow
+[sudo] password for user:
+root:$6$...
+```
+
+<Callout type="info">
+  **Common Pattern:** The `sudo !!` pattern is extremely common. When you forget
+  to use `sudo` for a privileged command, just run `sudo !!` to retry with
+  elevated privileges.
+</Callout>
+
+#### `!$` - Last Argument of Previous Command
+
+Access just the last argument from the previous command:
+
+```bash copy
+ls /etc/passwd
+```
+
+Output:
+
+```
+/etc/passwd
+```
+
+```bash copy
+cat !$
+```
+
+Output:
+
+```
+cat /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+...
+```
+
+### Arrow Key Navigation
+
+Use arrow keys to navigate through command history:
+
+| Key            | Action                               |
+| -------------- | ------------------------------------ |
+| **UpArrow**    | Move to previous command in history  |
+| **DownArrow**  | Move to next command in history      |
+| **LeftArrow**  | Move cursor left in current command  |
+| **RightArrow** | Move cursor right in current command |
+
+This allows you to recall a command, edit it, and execute the modified version.
+
+### Search History with `Ctrl+R`
+
+One of the most powerful history features is **reverse search**. Press **Ctrl+R** and start typing — bash searches backward through your history for matching commands.
+
+```
+(reverse-i-search)`':
+```
+
+As you type characters, bash shows the most recent matching command:
+
+```
+(reverse-i-search)`pass': cat /etc/passwd
+```
+
+**Navigation in reverse search:**
+
+- Keep typing to refine the search
+- Press **Ctrl+R** again to find the next older match
+- Press **Enter** to execute the found command
+- Press **Esc** or **LeftArrow/RightArrow** to edit the command
+- Press **Ctrl+G** to cancel the search
+
+<Callout type="success">
+  **Pro Tip:** `Ctrl+R` is a game-changer for productivity. Instead of pressing
+  UpArrow dozens of times or retyping complex commands, just search for a
+  keyword from the command.
+</Callout>
+
+### Quick Word Substitution: `^old^new`
+
+Replace a word from the previous command with the `^old^new` syntax:
+
+```bash copy
+cat /etc/passwd
+```
+
+Output:
+
+```
+root:x:0:0:root:/root:/bin/bash
+...
+```
+
+```bash copy
+^passwd^shadow
+```
+
+Output:
+
+```
+cat /etc/shadow
+cat: /etc/shadow: Permission denied
+```
+
+```bash copy
+sudo !!
+```
+
+Output:
+
+```
+sudo cat /etc/shadow
+[sudo] password for user:
+root:$6$...
+```
+
+This substitutes the first occurrence of "passwd" with "shadow" in the previous command.
+
+---
+
+## Edit the Command Line
+
+Bash provides powerful command-line editing shortcuts that dramatically increase your efficiency. These shortcuts are based on **Emacs** text editor keybindings.
+
+### Essential Keyboard Shortcuts
+
+| Shortcut            | Description                                          |
+| ------------------- | ---------------------------------------------------- |
+| **Ctrl+A**          | Jump to the beginning of the command line            |
+| **Ctrl+E**          | Jump to the end of the command line                  |
+| **Ctrl+U**          | Clear from cursor to the beginning of the line       |
+| **Ctrl+K**          | Clear from cursor to the end of the line             |
+| **Ctrl+W**          | Delete the word before the cursor                    |
+| **Ctrl+LeftArrow**  | Jump to the beginning of the previous word           |
+| **Ctrl+RightArrow** | Jump to the end of the next word                     |
+| **Ctrl+R**          | Search command history (reverse search)              |
+| **Ctrl+L**          | Clear the screen (same as `clear` command)           |
+| **Ctrl+C**          | Cancel the current command/interrupt running process |
+| **Ctrl+D**          | Exit shell (or send EOF)                             |
+| **Ctrl+Z**          | Suspend the current process                          |
+
+### Practical Examples
+
+**Fixing a typo at the beginning:**
+
+If you type a command incorrectly:
+
+```
+cta /etc/passwd
+```
+
+Instead of retyping, press **Ctrl+A** to jump to the beginning, fix "cta" to "cat", then press **Enter**.
+
+**Clearing a long command:**
+
+If you've typed a long command and want to start over:
+
+```
+sudo systemctl restart very-long-service-name-that-i-typed-wrong
+```
+
+Press **Ctrl+U** to clear the entire line and start fresh.
+
+**Deleting to the end:**
+
+If you want to remove part of a command from the cursor to the end:
+
+```
+cat /etc/passwd /etc/shadow /etc/group
+```
+
+Move the cursor after "passwd" (using arrow keys or **Ctrl+LeftArrow**) and press **Ctrl+K** to delete "/etc/shadow /etc/group".
+
+**Word-by-word navigation:**
+
+To quickly edit a specific word in a command:
+
+```
+sudo systemctl restart apache2
+```
+
+To change "apache2" to "nginx":
+
+1. Press **Ctrl+LeftArrow** to jump back one word (to "apache2")
+2. Press **Ctrl+W** to delete "apache2"
+3. Type "nginx"
+
+<Callout type="success">
+  **Muscle Memory:** These shortcuts feel awkward at first, but after a week of
+  conscious practice, they become automatic. Professional Linux users rarely use
+  the mouse or arrow keys for editing commands.
+</Callout>
+
+---
+
+## Putting It All Together
+
+Let's combine everything we've learned in a practical workflow that demonstrates the power of command-line efficiency:
+
+**Step 1: Check your current location**
+
+```bash copy
+pwd
+```
+
+Output:
+
+```
+/home/user
+```
+
+**Step 2: Navigate to the logs directory**
+
+```bash copy
+cd /var/log
+```
+
+```bash copy
+pwd
+```
+
+Output:
+
+```
+/var/log
+```
+
+**Step 3: List available log files (use tab completion)**
+
+```bash copy
+ls *.log
+```
+
+Output:
+
+```
+boot.log  secure.log  messages.log  syslog
+```
+
+**Step 4: Try to view the last 20 lines of a log file**
+
+```bash copy
+tail -n 20 messages.log
+```
+
+Output (if permission denied):
+
+```
+tail: cannot open 'messages.log' for reading: Permission denied
+```
+
+**Step 5: Use sudo with the previous command (!!)**
+
+```bash copy
+sudo !!
+```
+
+Output:
+
+```
+sudo tail -n 20 messages.log
+[sudo] password for user:
+Nov 12 14:25:10 host systemd[1]: Started Session 1 of user root.
+Nov 12 14:30:45 host kernel: [12345.678901] eth0: link up
+Nov 12 14:32:11 host systemd[1]: Failed to start service.
+...more log entries...
+```
+
+**Step 6: Search for errors in the same log file**
+
+```bash copy
+grep "error" messages.log
+```
+
+Output:
+
+```
+grep: messages.log: Permission denied
+```
+
+**Step 7: Use sudo with the last argument (!$)**
+
+```bash copy
+sudo grep "error" !$
+```
+
+Output:
+
+```
+sudo grep "error" messages.log
+Nov 12 14:32:11 host systemd[1]: Failed to start service.
+Nov 12 15:20:33 host kernel: error: device not found
+```
+
+**Step 8: View your command history**
+
+```bash copy
+history | tail -8
+```
+
+Output:
+
+```
+  201  pwd
+  202  cd /var/log
+  203  pwd
+  204  ls *.log
+  205  tail -n 20 messages.log
+  206  sudo tail -n 20 messages.log
+  207  sudo grep "error" messages.log
+  208  history | tail -8
+```
+
+**Step 9: Return to home directory**
+
+```bash copy
+cd
+```
+
+```bash copy
+pwd
+```
+
+Output:
+
+```
+/home/user
+```
+
+**Step 10: Go back to the previous directory using cd -**
+
+```bash copy
+cd -
+```
+
+Output:
+
+```
+/var/log
+```
+
+```bash copy
+pwd
+```
+
+Output:
+
+```
+/var/log
+```
+
+<Callout type="success">
+  **What We Just Did:** This workflow demonstrated: - Navigation with `cd` and
+  `pwd` - Tab completion for efficiency - Handling permission errors with `sudo`
+  - History expansion with `!!` and `!$` - Reviewing command history - Switching
+  between directories with `cd -`
+</Callout>
+
+---
+
+## Summary
+
+In this section, you've learned the essential command-line fundamentals:
+
+1. **Command Syntax**: Commands, options, and arguments separated by spaces
+2. **Basic Commands**: `date`, `passwd` for simple operations
+3. **Navigation Commands**:
+   - `pwd` to show current directory
+   - `ls` to list directory contents (with options like `-l`, `-a`, `-h`)
+   - `cd` for changing directories with various shortcuts
+4. **Viewing File Contents**:
+   - `cat` for displaying files
+   - `more` for basic paging
+   - `less` for advanced paging with full navigation
+   - `head` and `tail` for viewing file beginnings and ends
+5. **Tab Completion**: Press Tab to complete commands, options, and file names
+6. **Command History**:
+   - Use `history` to view past commands
+   - Use `!number`, `!string`, `!!`, `!$` for history expansion
+   - Use `Ctrl+R` for reverse search
+   - Use arrow keys for navigation
+7. **Command-Line Editing**: Keyboard shortcuts like `Ctrl+A`, `Ctrl+E`, `Ctrl+U`, `Ctrl+K`, `Ctrl+W`
+
+<Callout type="success">
+  **Next Steps:** Now that you're comfortable with command-line basics, you're
+  ready to dive into file management operations. The next section covers
+  creating, copying, moving, and deleting files and directories — essential
+  skills for managing systems and organizing your work.
+</Callout>
